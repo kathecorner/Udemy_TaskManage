@@ -1,25 +1,23 @@
 const express = require("express");
 const app = express();
+const taskRoute = require("./routes/tasks");
+const connectDB = require("./db/connect");
 const PORT = 8080;
 
-app.get("/api/v1/tasks", (req, res)=> {
-    res.send("obtained all tasks.");
-});
+//routing
+app.use("/api/v1/tasks", taskRoute);
 
-app.post("/api/v1/tasks", (req, res)=> {
-    res.send("create a new tasks.");
-});
+//connecting to the database
+const start = async () => {
+    try {
+        await connectDB(
+            "mongodb+srv://bayerleverkusen676:wander5150@cluster0.pcipdmo.mongodb.net/todoapp?retryWrites=true&w=majority"
+            );
+            app.listen(PORT, console.log("the server is running."));
+    } catch (err){
+        console.log(err);
+    }
+};
 
-app.get("/api/v1/tasks/:id", (req, res)=> {
-    res.send("obtained the task.");
-});
 
-app.patch("/api/v1/tasks", (req, res)=> {
-    res.send("updated the task.");
-});
 
-app.delete("/api/v1/tasks/:id", (req, res)=> {
-    res.send("delete the task.");
-});
-
-app.listen(PORT, console.log("the server is running."));
